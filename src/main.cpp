@@ -3,6 +3,7 @@
 #include "json.hpp"
 #include "PID.h"
 #include <math.h>
+#include <algorithm>
 
 // for convenience
 using json = nlohmann::json;
@@ -35,22 +36,9 @@ int main()
   PID steer_pid, throttle_pid;
   // TODO: Initialize the pid variable.
 
-  /* Possible configurations
-  steer_pid.Init(0.07, 0.0, -1.5);
-  throttle_pid.Init(0.2, 0.0, 2.0);
+  steer_pid.Init(0.1, 0.0, -1.2); //0.08
+  throttle_pid.Init(0.16, 0.0001, 2.2); //1.8
 
-  steer_pid.Init(0.063, 0.0, -2.1);
-  throttle_pid.Init(0.2, 0.0, 1.8);
-
-  steer_pid.Init(0.06, 0.0, -0.78);
-  throttle_pid.Init(0.28, 0.0004, 3.2);
-
-  steer_pid.Init(0.08, 0.0, -0.78);
-  throttle_pid.Init(0.28, 0.00001, 3.2);
-  */
-
-  steer_pid.Init(0.08, 0.0, -0.78);
-  throttle_pid.Init(0.2, 0.00004, 3.2);
 
   h.onMessage([&steer_pid, &throttle_pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -68,7 +56,7 @@ int main()
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value = 0.0;
-          double throttle_value = 0.7;
+          double throttle_value = 0.6;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
@@ -79,6 +67,7 @@ int main()
           steer_value = -steer_pid.TotalError();
           throttle_pid.UpdateError(cte);
           throttle_value -= throttle_pid.TotalError();
+          throttle_value = std::min(throttle_value, 0.6);
           
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
