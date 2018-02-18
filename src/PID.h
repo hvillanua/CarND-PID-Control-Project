@@ -1,6 +1,9 @@
 #ifndef PID_H
 #define PID_H
 
+#include <iostream>
+#include <vector>
+
 class PID {
 public:
   /*
@@ -16,6 +19,13 @@ public:
   double Kp;
   double Ki;
   double Kd;
+
+  /*
+   * Window-related variables for i_error
+   */
+  const unsigned int window_size = 20;
+  std::vector<int> window_cte;
+  unsigned int window_position;
 
   /*
   * Constructor
