@@ -26,3 +26,4 @@ off the track. Both _D_ and _I_ were set to a value that experimentally made the
 little braking as necessary. The _I_ value was introduced to indicate that the car has a bias towards
 accelerating, helping to prevent high speed turns.
 
+Video of the project: https://youtu.be/bkoFuA8AIKA
